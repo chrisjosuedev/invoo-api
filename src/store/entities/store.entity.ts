@@ -1,5 +1,6 @@
 import { Brand } from 'src/brand/entities/brand.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
+import { Invoice } from "src/invoice/entities/invoice.entity";
 import { Item } from "src/item/entities/item.entity";
 import { Size } from 'src/size/entities/size.entity';
 import { User } from 'src/user/entities/user.entity';
@@ -49,4 +50,8 @@ export class Store {
   // 1:N Store - Item
   @OneToMany(() => Item, (item) => item.store, { lazy: true })
   items: Item[];
+
+  // 1:N Store - Invoice
+  @OneToMany(() => Invoice, (invoice) => invoice.store)
+  invoices: Invoice[];
 }

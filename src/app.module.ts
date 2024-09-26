@@ -12,6 +12,9 @@ import { StoreModule } from './store/store.module';
 import { BrandModule } from './brand/brand.module';
 import { SizeModule } from './size/size.module';
 import { ItemModule } from './item/item.module';
+import { InvoiceModule } from './invoice/invoice.module';
+import { InvoiceDetailModule } from './invoice-detail/invoice-detail.module';
+import { ItemImageModule } from "./item-image/item_image.module";
 
 @Module({
   imports: [
@@ -53,7 +56,10 @@ import { ItemModule } from './item/item.module';
     StoreModule,
     BrandModule,
     SizeModule,
-    ItemModule
+    ItemModule,
+    ItemImageModule,
+    InvoiceModule,
+    InvoiceDetailModule
   ],
 
   controllers: [],

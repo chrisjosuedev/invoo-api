@@ -1,6 +1,7 @@
+import { Invoice } from 'src/invoice/entities/invoice.entity';
 import { Person } from 'src/person/entities/person.entity';
 import { Store } from 'src/store/entities/store.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('customers')
 export class Customer {
@@ -23,4 +24,8 @@ export class Customer {
   @ManyToOne(() => Store, (store) => store.user)
   @JoinColumn({ name: 'id_store' })
   store: Store;
+
+  // 1:N Store - Invoice
+  @OneToMany(() => Invoice, (invoice) => invoice.customer, { lazy: true })
+  invoices: Invoice[];
 }

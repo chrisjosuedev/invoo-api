@@ -2,7 +2,7 @@ import { Item } from "src/item/entities/item.entity";
 import { Store } from 'src/store/entities/store.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('brand')
+@Entity('brands')
 export class Brand {
   @PrimaryGeneratedColumn('increment')
   id: number;
