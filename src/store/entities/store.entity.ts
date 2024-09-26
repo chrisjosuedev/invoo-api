@@ -1,0 +1,37 @@
+import { Customer } from 'src/customer/entities/customer.entity';
+import { User } from 'src/user/entities/user.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+@Entity('stores')
+export class Store {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
+
+  @Column({ name: 'store_name', type: 'varchar', length: 100, nullable: false })
+  name: string;
+
+  @Column({ type: 'varchar', length: 150, nullable: true })
+  description: string;
+
+  @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
+  email: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: false })
+  phone: string;
+
+  @Column({ name: 'logo_picture_url', type: 'text', nullable: true })
+  logoPicture: string;
+
+  @Column({ name: 'is_active', type: 'boolean', default: true })
+  isActive: string;
+
+  // Relations
+  // M:1 Store - User
+  @ManyToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'id_user' })
+  user: User;
+
+  // 1:N Store - Customer
+  @OneToMany(() => Customer, (customer) => customer.id)
+  customer: Customer[];
+}
