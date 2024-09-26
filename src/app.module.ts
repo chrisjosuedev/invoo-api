@@ -9,6 +9,9 @@ import { PersonModule } from './person/person.module';
 import { UserModule } from './user/user.module';
 import { CustomerModule } from './customer/customer.module';
 import { StoreModule } from './store/store.module';
+import { BrandModule } from './brand/brand.module';
+import { SizeModule } from './size/size.module';
+import { ItemModule } from './item/item.module';
 
 @Module({
   imports: [
@@ -48,6 +51,9 @@ import { StoreModule } from './store/store.module';
     UserModule,
     CustomerModule,
     StoreModule,
+    BrandModule,
+    SizeModule,
+    ItemModule
   ],
 
   controllers: [],

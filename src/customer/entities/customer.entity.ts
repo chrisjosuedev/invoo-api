@@ -1,6 +1,6 @@
 import { Person } from 'src/person/entities/person.entity';
 import { Store } from 'src/store/entities/store.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('customers')
 export class Customer {
@@ -19,8 +19,8 @@ export class Customer {
   @JoinColumn({ name: 'id_person' })
   person: Person;
 
-  // 1:1 Customer - Store
-  @OneToOne(() => Store, (store) => store.user)
+  // M:1 Customer - Store
+  @ManyToOne(() => Store, (store) => store.user)
   @JoinColumn({ name: 'id_store' })
   store: Store;
 }
