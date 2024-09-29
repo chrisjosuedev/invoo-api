@@ -1,6 +1,6 @@
-import { Person } from "src/person/entities/person.entity";
-import { Store } from "src/store/entities/store.entity";
-import { Column, Entity,JoinColumn,OneToMany,OneToOne,PrimaryGeneratedColumn } from 'typeorm';
+import { Person } from 'src/person/entities/person.entity';
+import { Store } from 'src/store/entities/store.entity';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
@@ -13,12 +13,12 @@ export class User {
   @Column({ type: 'varchar', length: 70, nullable: false })
   password: string;
 
-  @Column({ name: 'is_google', type: 'boolean', nullable: true, default: true })
+  @Column({ name: 'is_google', type: 'boolean', nullable: true, default: false })
   isGoogle: boolean;
 
   // Relations
   // 1:1 Person - User
-  @OneToOne(() => Person, (person) => person.id)
+  @OneToOne(() => Person, (person) => person.id, { eager: true })
   @JoinColumn({ name: 'id_person' })
   person: Person;
 
