@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { BadRequestException, HttpStatus, ValidationPipe } from '@nestjs/common';
-import { ErrorDto } from './common/dto/ErrorDto.dto';
+import { ErrorDto } from './common/dto/error-dto.dto';
 import { ValidationError } from 'class-validator';
 
 async function bootstrap() {
@@ -11,7 +11,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   
   /**
-   * TODO: Custom errors in string array
+   * TODO: Custom errors in string array, Exclude certains Fields from Fetching data
    */
 
   // Validations Pipes

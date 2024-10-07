@@ -1,11 +1,11 @@
 import { Person } from 'src/person/entities/person.entity';
 import { Store } from 'src/store/entities/store.entity';
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @PrimaryColumn()
+  person_id: number;
 
   @Column({ type: 'varchar', length: 64, nullable: false, unique: true })
   username: string;
@@ -18,8 +18,8 @@ export class User {
 
   // Relations
   // 1:1 Person - User
-  @OneToOne(() => Person, (person) => person.id, { eager: true })
-  @JoinColumn({ name: 'id_person' })
+  @OneToOne(() => Person, (person) => person.user, { onUpdate: 'CASCADE' })
+  @JoinColumn({ name: 'person_id' })
   person: Person;
 
   // 1:N User - Stores

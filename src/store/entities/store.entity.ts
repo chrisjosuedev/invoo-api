@@ -31,7 +31,7 @@ export class Store {
 
   // Relations
   // M:1 Store - User
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.person_id)
   @JoinColumn({ name: 'id_user' })
   user: User;
 
