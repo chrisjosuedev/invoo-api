@@ -45,7 +45,7 @@ export class UserController {
   @Patch()
   async update(@Body() updateUserDto: UpdateUserDto) {
     // TODO: Get id from User Header
-    const id = 12;
+    const id = 2;
     return await this.userService.update(updateUserDto, id)
   }
 }

@@ -27,6 +27,6 @@ export class Person {
   @Column({ name: 'is_active', type: 'boolean', default: true })
   isActive: boolean;
 
-  @OneToOne(() => User, (user) => user.person, { eager: false })
-  user?: User;
+  @OneToOne(() => User, (user) => user.person)
+  user: User;
 }

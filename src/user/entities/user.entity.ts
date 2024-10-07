@@ -18,7 +18,7 @@ export class User {
 
   // Relations
   // 1:1 Person - User
-  @OneToOne(() => Person, (person) => person.user, { onUpdate: 'CASCADE' })
+  @OneToOne(() => Person, (person) => person.user, { eager: true, cascade: true })
   @JoinColumn({ name: 'person_id' })
   person: Person;
 

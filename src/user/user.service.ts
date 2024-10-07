@@ -40,7 +40,7 @@ export class UserService {
     const [users, countUsers] = await userQuery
       .skip((currentPage - 1) * itemsPerPage)
       .take(itemsPerPage)
-      .orderBy('u.id', 'DESC')
+      .orderBy('u.person_id', 'DESC')
       .getManyAndCount();
 
     return {
@@ -78,16 +78,16 @@ export class UserService {
     const existsUsername = await this.findByUsername(username);
     if (existsUsername) throw new BadRequestException(new ErrorDto('Given username already exists.', HttpStatus.BAD_REQUEST));
 
-    // Saving new user in person table
-    const savedPerson = await this.personService.create(person);
-
     try {
+      // Saving new user in person table
+      const newPerson = this.personService.create(person);
+
       // TODO: Encrypt password
       const newUser: User = this.userRepository.create({
         username,
         password,
         isGoogle: isGoogle || false,
-        person: savedPerson,
+        person: newPerson,
       });
 
       // Save user
@@ -101,13 +101,9 @@ export class UserService {
   // Update User
   async update(updateUserDto: UpdateUserDto, id: number): Promise<User> {
     const { username, ...person } = updateUserDto;
-    const { email } = person;
+    const { email, ...restPerson } = person;
 
-    //const user = await this.findByPersonId(id);
-    const user = await this.userRepository.preload({
-      person_id: id,
-      ...person
-    });
+    const user = await this.findById(id);
 
     if (!user) throw new NotFoundException(new ErrorDto('User does not exists.', HttpStatus.NOT_FOUND));
 
@@ -124,7 +120,8 @@ export class UserService {
     // Verify if email exists
     if (email) {
       const emailExists = await this.personService.findByEmail(email);
-      if (emailExists && emailExists.user.person_id !== user.person_id) throw new BadRequestException(new ErrorDto('Email already taken.', HttpStatus.BAD_REQUEST));
+      if (emailExists && emailExists.user.person_id !== user.person_id)
+        throw new BadRequestException(new ErrorDto('Email already taken.', HttpStatus.BAD_REQUEST));
 
       // Set Email
       user.person.email = email;
@@ -132,13 +129,9 @@ export class UserService {
 
     try {
       // Update Person Data
-      //await this.personService.update(person, user.person.id);
-
-      console.log(user)
-
+      user.person = { ...user.person, ...restPerson };
       // Update User
-      //return await this.userRepository.save(user);
-      return;
+      return await this.userRepository.save(user);
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(new ErrorDto(`Error udpating entity: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR));
