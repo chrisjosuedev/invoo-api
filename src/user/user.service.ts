@@ -1,19 +1,14 @@
-import {
-  BadRequestException,
-  HttpStatus,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './entities/user.entity';
-import { DataSource, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { PersonService } from 'src/person/person.service';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ErrorDto } from 'src/common/dto/error-dto.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { ResponseHandler } from "src/common/builders/response.builder";
+import { ResponseHandler } from 'src/common/builders/response.builder';
 
 @Injectable()
 export class UserService {
@@ -44,18 +39,12 @@ export class UserService {
   async findAllUsers(paginationData: PaginationDto): Promise<any> {
     const { itemsPerPage, currentPage, search } = paginationData;
 
-    const userQuery = this.userRepository
-      .createQueryBuilder('u')
-      .innerJoinAndSelect('u.person', 'p')
-      .where(`p.isActive = true`);
+    const userQuery = this.userRepository.createQueryBuilder('u').innerJoinAndSelect('u.person', 'p').where(`p.isActive = true`);
 
     if (search)
-      userQuery.andWhere(
-        `u.username ILIKE :search OR CONCAT(p.firstName, ' ', p.lastName) ILIKE :search AND p.isActive = true`,
-        {
-          search: `%${search}%`,
-        },
-      );
+      userQuery.andWhere(`u.username ILIKE :search OR CONCAT(p.firstName, ' ', p.lastName) ILIKE :search AND p.isActive = true`, {
+        search: `%${search}%`,
+      });
 
     const [users, countUsers] = await userQuery
       .skip((currentPage - 1) * itemsPerPage)
@@ -80,11 +69,10 @@ export class UserService {
     const userByUsername = await this.findByUsername(query);
     if (userByUsername) return userByUsername;
 
-    if (!userByEmail && !userByUsername)
-      throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
+    if (!userByEmail && !userByUsername) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
   }
 
-  // Creating a new User
+  // Creating a New User
   async create(createUserDto: CreateUserDto): Promise<User> {
     const { username, password, isGoogle, ...person } = createUserDto;
 
@@ -94,17 +82,19 @@ export class UserService {
 
     // Verify if username already exists
     const existsUsername = await this.findByUsername(username);
-    if (existsUsername)
-      throw new BadRequestException(new ErrorDto(HttpStatus.BAD_REQUEST, 'Given username already exists.'));
+    if (existsUsername) throw new BadRequestException(new ErrorDto(HttpStatus.BAD_REQUEST, 'Given username already exists.'));
 
     try {
       // Saving new user in person table
       const newPerson = this.personService.create(person);
 
-      // TODO: Encrypt password
+      // Encrypt password
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Create Instance
       const newUser: User = this.userRepository.create({
         username,
-        password,
+        password: hashedPassword,
         isGoogle: isGoogle || false,
         person: newPerson,
       });
@@ -113,9 +103,7 @@ export class UserService {
       return await this.userRepository.save(newUser);
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(
-        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error saving entity: ${error.message}`),
-      );
+      throw new InternalServerErrorException(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error saving entity: ${error.message}`));
     }
   }
 
@@ -156,9 +144,7 @@ export class UserService {
       return await this.userRepository.save(user);
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(
-        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error updating entity: ${error.message}`),
-      );
+      throw new InternalServerErrorException(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error updating entity: ${error.message}`));
     }
   }
 
@@ -175,9 +161,7 @@ export class UserService {
       await this.personService.delete(user.person);
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(
-        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error udpating entity: ${error.message}`),
-      );
+      throw new InternalServerErrorException(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error udpating entity: ${error.message}`));
     }
   }
 }

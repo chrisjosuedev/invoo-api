@@ -15,6 +15,7 @@ import { ItemModule } from './item/item.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { InvoiceDetailModule } from './invoice-detail/invoice-detail.module';
 import { ItemImageModule } from "./item-image/item_image.module";
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { ItemImageModule } from "./item-image/item_image.module";
     ItemModule,
     ItemImageModule,
     InvoiceModule,
-    InvoiceDetailModule
+    InvoiceDetailModule,
+    AuthModule
   ],
 
   controllers: [],

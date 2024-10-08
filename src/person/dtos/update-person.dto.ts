@@ -13,9 +13,10 @@ export class UpdatePersonDto {
   @IsString({ message: 'Last Name must be a string.' })
   lastName: string;
 
+  @IsOptional()
   @IsNotEmpty({ message: 'Email is required.' })
   @IsEmail({}, { message: 'Email is invalid.' })
-  email: string;
+  email?: string;
 
   @IsOptional()
   @IsString({ message: 'Phone must be a string.' })
