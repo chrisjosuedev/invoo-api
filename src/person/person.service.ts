@@ -16,7 +16,7 @@ export class PersonService {
 
   // Find Person By Email
   async findByEmail(email: string): Promise<Person> {
-    return await this.personRepository.findOne({ where: { email }, relations: ['user'] });
+    return await this.personRepository.findOne({ where: { email, isActive: true }, relations: ['user'] });
   }
 
   // Create a Person Instance
@@ -24,11 +24,24 @@ export class PersonService {
     try {
       // If not, save person
       return this.personRepository.create(createPersonDto);
-      // Saving and return Person
-      // return await this.personRepository.save(newPerson);
     } catch (error) {
       console.log(error);
-      throw new InternalServerErrorException(new ErrorDto(`Error creating instance of entity: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR));
+      throw new InternalServerErrorException(
+        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating instance of entity: ${error.message}`),
+      );
+    }
+  }
+
+  // Delete Person
+  async delete(person: Person) {
+    try {
+      person.isActive = false;
+      await this.personRepository.save(person);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating instance of entity: ${error.message}`),
+      );
     }
   }
 }

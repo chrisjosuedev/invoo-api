@@ -1,7 +1,7 @@
 export class ErrorDto<T> {
   constructor(
-    private message: string,
     private statusCode: number,
+    private message: string,
     private details?: T | T[],
   ) {
     this.statusCode = statusCode;

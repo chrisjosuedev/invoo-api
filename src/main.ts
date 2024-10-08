@@ -22,8 +22,8 @@ async function bootstrap() {
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
         return new BadRequestException(
           new ErrorDto(
-            'Error in fields.',
             HttpStatus.BAD_REQUEST,
+            'Error in fields.',
             validationErrors.map((error) => ({
               field: error.property,
               error: Object.values(error.constraints).join(', '),
