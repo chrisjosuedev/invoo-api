@@ -9,6 +9,7 @@ import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { ErrorDto } from 'src/common/dto/error-dto.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { ResponseHandler } from 'src/common/builders/response.builder';
+import { PaginationReponse } from 'src/common/interfaces/response.interface';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
   ) {}
 
   // Find User By Id
-  private async findById(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     return await this.userRepository
       .createQueryBuilder('u')
       .innerJoinAndSelect('u.person', 'p')
@@ -36,7 +37,7 @@ export class UserService {
   }
 
   // Find all Users
-  async findAllUsers(paginationData: PaginationDto): Promise<any> {
+  async findAllUsers(paginationData: PaginationDto): Promise<PaginationReponse<User>> {
     const { itemsPerPage, currentPage, search } = paginationData;
 
     const userQuery = this.userRepository.createQueryBuilder('u').innerJoinAndSelect('u.person', 'p').where(`p.isActive = true`);
@@ -114,7 +115,8 @@ export class UserService {
 
     const user = await this.findById(id);
 
-    if (!user || !user.person.isActive) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists or account was disabled.'));
+    if (!user || !user.person.isActive)
+      throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists or account was disabled.'));
 
     // Verify if user exists
     if (username) {

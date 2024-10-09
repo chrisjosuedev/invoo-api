@@ -18,10 +18,6 @@ export class CreatePersonDto {
   email: string;
 
   @IsOptional()
-  @IsString({ message: 'Profile must be a string.' })
-  profileUrl?: string;
-
-  @IsOptional()
   @IsString({ message: 'Phone must be a string.' })
   @MaxLength(20, { message: 'Phone should not be greater than 50 characters.' })
   // TODO: Custom Decorator to validate a phone number

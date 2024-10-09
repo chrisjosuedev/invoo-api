@@ -26,14 +26,14 @@ export class UserController {
 
   // Update User Info
   @Patch()
-  async update(@Body() updateUserDto: UpdateUserDto, @Req() req) {
+  async update(@Body() updateUserDto: UpdateUserDto, @Req() req: any) {
     const updatedUser = await this.userService.update(updateUserDto, req.user?.id);
     return ResponseHandler.responseBuilder(HttpStatus.OK, 'User updated successfully.', updatedUser);
   }
 
   // Desactive Account
   @Delete()
-  async desactive(@Req() req) {
+  async desactive(@Req() req: any) {
     await this.userService.desactivate(req.user?.id);
     return ResponseHandler.responseBuilder(HttpStatus.OK, 'User removed successfully.');
   }
