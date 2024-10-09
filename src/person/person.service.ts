@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from './entities/person.entity';
 import { Repository } from 'typeorm';
@@ -24,6 +24,19 @@ export class PersonService {
     try {
       // If not, save person
       return this.personRepository.create(createPersonDto);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(
+        new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error creating instance of entity: ${error.message}`),
+      );
+    }
+  }
+
+  // Activate Person
+  async activate(person: Person) {
+    try {
+      person.isActive = true;
+      await this.personRepository.save(person);
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(

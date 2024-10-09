@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from 'src/user/dtos/create-user.dto';
@@ -23,6 +23,9 @@ export class AuthService {
     // Match Password
     const isMatch = await bcrypt.compare(password, foundUser.password);
     if (!isMatch) throw new UnauthorizedException(new ErrorDto(HttpStatus.UNAUTHORIZED, 'Password is incorrect.'));
+
+    // Check if user want to reactivate the account
+    if (!foundUser.person.isActive) await this.userService.activate(foundUser.person_id);
 
     // Return user if all correct
     return this.signToken(foundUser);

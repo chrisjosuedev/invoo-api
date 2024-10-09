@@ -22,7 +22,7 @@ export class UserService {
     return await this.userRepository
       .createQueryBuilder('u')
       .innerJoinAndSelect('u.person', 'p')
-      .where('u.person_id = :id AND p.isActive = true', { id })
+      .where('u.person_id = :id', { id })
       .getOne();
   }
 
@@ -114,7 +114,7 @@ export class UserService {
 
     const user = await this.findById(id);
 
-    if (!user) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
+    if (!user || !user.person.isActive) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists or account was disabled.'));
 
     // Verify if user exists
     if (username) {
@@ -148,14 +148,28 @@ export class UserService {
     }
   }
 
+  // Active Account
+  async activate(id: number) {
+    const user = await this.findById(id);
+    if (!user) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
+
+    // change status
+    try {
+      // Update Person Data
+      await this.personService.activate(user.person);
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error udpating entity: ${error.message}`));
+    }
+  }
+
   // Desactivate Account
   async desactivate(id: number) {
     const user = await this.findById(id);
 
-    if (!user) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
+    if (!user || !user.person.isActive) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
 
     // change status
-
     try {
       // Update Person Data
       await this.personService.delete(user.person);
