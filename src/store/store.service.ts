@@ -99,7 +99,7 @@ export class StoreService {
 
     // Update store
     try {
-      return await this.storeRepository.save({ storeFound, ...updateStoreDto });
+      return await this.storeRepository.save({ ...storeFound, ...updateStoreDto });
     } catch (error) {
       console.log(error);
       throw new InternalServerErrorException(new ErrorDto(HttpStatus.INTERNAL_SERVER_ERROR, `Error saving entity: ${error.message}`));

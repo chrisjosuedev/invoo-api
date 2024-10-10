@@ -6,7 +6,7 @@ import { ResponseHandler } from 'src/common/builders/response.builder';
 import { CreateStoreDto } from './dtos/create-store.dto';
 import { UpdateStoreDto } from "./dtos/update-store.dto";
 
-@Controller('store')
+@Controller('stores')
 @UseGuards(JwtAuthGuard)
 export class StoreController {
   constructor(private readonly storeService: StoreService) {}
