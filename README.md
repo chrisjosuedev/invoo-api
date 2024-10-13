@@ -17,7 +17,7 @@ SAAS that simplifies stock management, ensures accurate billing, and provides to
 ## 🤖 General Database Diagram
 
 <p align="center">
-   <img src="./public/images/invoo-app-database-diagram.jpg" alt="DB-diagram" />
+   <img src="./public/images/invoo-app-database-diagram.png" alt="DB-diagram" />
 </p>
 
 
