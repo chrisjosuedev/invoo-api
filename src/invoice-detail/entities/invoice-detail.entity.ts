@@ -1,5 +1,5 @@
 import { Invoice } from "src/invoice/entities/invoice.entity";
-import { Item } from 'src/item/entities/item.entity';
+import { Product } from "src/product/entities/product.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('invoice_details')
@@ -20,10 +20,10 @@ export class InvoiceDetail {
   subtotal: number;
 
   // Relations
-  // M:1 InvoiceDetail - Item
-  @ManyToOne(() => Item, (item) => item.id)
-  @JoinColumn({ name: 'id_item' })
-  item: Item;
+  // M:1 InvoiceDetail - Product
+  @ManyToOne(() => Product, (product) => product.id)
+  @JoinColumn({ name: 'id_product' })
+  product: Product;
 
   // M:1 InvoiceDetail - Invoice
   @ManyToOne(() => Invoice, (invoice) => invoice.id)

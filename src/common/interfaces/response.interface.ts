@@ -6,7 +6,7 @@ export interface ResponseBuilder<T> {
 
 export interface PaginationReponse<T> {
   meta: Meta;
-  data: T[];
+  items: T[];
 }
 
 interface Meta {

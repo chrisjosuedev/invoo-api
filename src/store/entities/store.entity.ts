@@ -1,8 +1,6 @@
-import { Brand } from 'src/brand/entities/brand.entity';
 import { Customer } from 'src/customer/entities/customer.entity';
 import { Invoice } from 'src/invoice/entities/invoice.entity';
-import { Item } from 'src/item/entities/item.entity';
-import { Size } from 'src/size/entities/size.entity';
+import { Product } from "src/product/entities/product.entity";
 import { User } from 'src/user/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -39,17 +37,9 @@ export class Store {
   @OneToMany(() => Customer, (customer) => customer.id, { lazy: true })
   customer: Customer[];
 
-  // 1:N Store - Brand
-  @OneToMany(() => Brand, (brand) => brand.store, { lazy: true })
-  brands: Brand[];
-
-  // 1:N Store - Sizes
-  @OneToMany(() => Size, (size) => size.store, { lazy: true })
-  sizes?: Size[];
-
   // 1:N Store - Item
-  @OneToMany(() => Item, (item) => item.store, { lazy: true })
-  items: Item[];
+  @OneToMany(() => Product, (product) => product.store, { lazy: true })
+  products: Product[];
 
   // 1:N Store - Invoice
   @OneToMany(() => Invoice, (invoice) => invoice.store, { lazy: true })

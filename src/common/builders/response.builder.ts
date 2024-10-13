@@ -14,7 +14,7 @@ export class ResponseHandler {
   }
 
   // Pagination Reponse
-  public static paginationBuilder<T>(data: T[], length: number, itemsPerPage: number, currentPage: number): PaginationReponse<T> {
+  public static paginationBuilder<T>(items: T[], length: number, itemsPerPage: number, currentPage: number): PaginationReponse<T> {
     const response: PaginationReponse<T> = {
       meta: {
         totalItems: length,
@@ -22,7 +22,7 @@ export class ResponseHandler {
         itemsPerPage,
         currentPage 
       },
-      data
+      items
     };
 
     return response;

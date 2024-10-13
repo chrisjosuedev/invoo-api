@@ -9,13 +9,11 @@ import { PersonModule } from './person/person.module';
 import { UserModule } from './user/user.module';
 import { CustomerModule } from './customer/customer.module';
 import { StoreModule } from './store/store.module';
-import { BrandModule } from './brand/brand.module';
-import { SizeModule } from './size/size.module';
-import { ItemModule } from './item/item.module';
 import { InvoiceModule } from './invoice/invoice.module';
 import { InvoiceDetailModule } from './invoice-detail/invoice-detail.module';
-import { ItemImageModule } from "./item-image/item_image.module";
 import { AuthModule } from './auth/auth.module';
+import { ProductModule } from './product/product.module';
+import { ProductImageModule } from './product-image/product-image.module';
 
 @Module({
   imports: [
@@ -55,13 +53,13 @@ import { AuthModule } from './auth/auth.module';
     UserModule,
     CustomerModule,
     StoreModule,
-    BrandModule,
-    SizeModule,
-    ItemModule,
-    ItemImageModule,
+    ProductModule,
+    ProductImageModule,
     InvoiceModule,
     InvoiceDetailModule,
-    AuthModule
+    AuthModule,
+    ProductModule,
+    ProductImageModule,
   ],
 
   controllers: [],
