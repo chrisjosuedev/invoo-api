@@ -18,7 +18,7 @@ export class StoreService {
   ) {}
 
   // Find By Id
-  async findById(storeId: number, userId: number): Promise<Store> {
+  async findById(storeId: number, userId: string): Promise<Store> {
     const storeFound = await this.storeRepository
       .createQueryBuilder('s')
       .innerJoinAndSelect('s.user', 'u')
@@ -34,13 +34,13 @@ export class StoreService {
   }
 
   // Get User Stores
-  async findAllStores(paginationDto: PaginationDto, userId: number): Promise<PaginationReponse<Store>> {
+  async findAllStores(paginationDto: PaginationDto, userId: string): Promise<PaginationReponse<Store>> {
     const { itemsPerPage, currentPage, search } = paginationDto;
 
     const storeQuery = this.storeRepository
       .createQueryBuilder('s')
       .innerJoinAndSelect('s.user', 'u')
-      .where('s.isActive = true AND u.person_id = :id', { id: userId });
+      .where('s.isActive = true AND u.id = :id', { id: userId });
 
     if (search) storeQuery.andWhere(`s.name ILIKE :search AND s.isActive = true`, { search: `%${search}%` });
 
@@ -56,11 +56,11 @@ export class StoreService {
   }
 
   // Find Store By Name
-  async findByName(storeName: string, userId: number): Promise<Store> {
+  async findByName(storeName: string, userId: string): Promise<Store> {
     return await this.storeRepository
       .createQueryBuilder('s')
       .innerJoinAndSelect('s.user', 'u')
-      .where(`s.name ILIKE :name AND u.person_id = :id`, {
+      .where(`s.name ILIKE :name AND u.id = :id`, {
         name: `%${storeName}%`,
         id: userId,
       })
@@ -68,13 +68,13 @@ export class StoreService {
   }
 
   // Create a new User Store
-  async create(createStoreDto: CreateStoreDto, userId: number): Promise<Store> {
+  async create(createStoreDto: CreateStoreDto, userId: string): Promise<Store> {
     const existStoreName = await this.findByName(createStoreDto.name, userId);
     if (existStoreName) throw new BadRequestException(new ErrorDto(HttpStatus.BAD_REQUEST, 'Store name is already taken.'));
 
     // Get User in Session
     const userInSession = await this.userService.findById(userId);
-    if (userInSession && !userInSession.person.isActive)
+    if (!userInSession || !userInSession.isActive)
       throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'User does not exists.'));
 
     // Save store
@@ -91,7 +91,7 @@ export class StoreService {
   }
 
   // Update User Store Data
-  async update(updateStoreDto: UpdateStoreDto, id: number, userId: number): Promise<Store> {
+  async update(updateStoreDto: UpdateStoreDto, id: number, userId: string): Promise<Store> {
     // Find Store
     const storeFound = await this.findById(id, userId);
 
@@ -107,7 +107,7 @@ export class StoreService {
   }
 
   // Delete User Store
-  async delete(id: number, userId: number) {
+  async delete(id: number, userId: string) {
     // Find Store
     const storeFound = await this.findById(id, userId);
     if (!storeFound || !storeFound.isActive) throw new NotFoundException(new ErrorDto(HttpStatus.NOT_FOUND, 'Store does not exists.'));

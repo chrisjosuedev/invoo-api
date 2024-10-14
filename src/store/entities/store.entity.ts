@@ -29,7 +29,7 @@ export class Store {
 
   // Relations
   // M:1 Store - User
-  @ManyToOne(() => User, (user) => user.person_id, { eager: true })
+  @ManyToOne(() => User, (user) => user.id, { eager: true })
   @JoinColumn({ name: 'id_user' })
   user: User;
 

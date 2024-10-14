@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DBConfiguration } from './config/configuration.interface';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { PersonModule } from './person/person.module';
 import { UserModule } from './user/user.module';
 import { CustomerModule } from './customer/customer.module';
 import { StoreModule } from './store/store.module';
@@ -49,7 +48,6 @@ import { ProductImageModule } from './product-image/product-image.module';
     }),
 
     // Modules
-    PersonModule,
     UserModule,
     CustomerModule,
     StoreModule,

@@ -25,7 +25,7 @@ export class AuthService {
     if (!isMatch) throw new UnauthorizedException(new ErrorDto(HttpStatus.UNAUTHORIZED, 'Password is incorrect.'));
 
     // Check if user want to reactivate the account
-    if (!foundUser.person.isActive) await this.userService.activate(foundUser.person_id);
+    if (!foundUser.isActive) await this.userService.activate(foundUser.id);
 
     // Return user if all correct
     return this.signToken(foundUser);
@@ -33,7 +33,7 @@ export class AuthService {
 
   // Login
   signToken(user: User): TokenPayload {
-    const payload: AccessTokenPayload = { id: user.person_id, username: user.username  };
+    const payload: AccessTokenPayload = { id: user.id, username: user.username  };
     return { token: this.jwtService.sign(payload) };
   }
 

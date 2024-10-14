@@ -3,6 +3,6 @@ export interface TokenPayload {
 }
 
 export interface AccessTokenPayload {
-  id: number;
+  id: string;
   username: string;
 }

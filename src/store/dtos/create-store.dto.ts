@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from "class-validator";
 
 export class CreateStoreDto {
   @IsNotEmpty({ message: 'Store Name is required.' })
@@ -20,5 +20,6 @@ export class CreateStoreDto {
   @IsOptional()
   @IsString({ message: 'Phone must be a string.' })
   @MaxLength(20, { message: 'Phone should not be greater than 50 characters.' })
+  @Matches(new RegExp('^[0-9]*$'), { message: 'Phone must contain only numbers.' })
   phone: string;
 }

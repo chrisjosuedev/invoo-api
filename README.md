@@ -8,7 +8,7 @@
 ✨ Rest API to help business owners to manage their inventory and invoicing.
 
 ## ⚡️ Description
-SAAS that simplifies stock management, ensures accurate billing, and provides tools to help businesses stay organized and efficient.
+SAAS that simplifies stock management for small entrepreneurs, ensures accurate billing, and provides tools to help businesses stay organized and efficient.
 
 ## 👨‍💻 Documentation OpenAPI
 > Test with `Prod Env` or `Dev Env` if your using in your localhost.
@@ -17,7 +17,7 @@ SAAS that simplifies stock management, ensures accurate billing, and provides to
 ## 🤖 General Database Diagram
 
 <p align="center">
-   <img src="./public/images/invoo-app-database-diagram.png" alt="DB-diagram" />
+   <img src="./public/images/invoo-app.png" alt="DB-diagram" />
 </p>
 
 
